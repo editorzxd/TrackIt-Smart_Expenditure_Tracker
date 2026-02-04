@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Transaction</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <div class="app-wrapper">
+        <nav class="navbar navbar-expand-lg mb-4">
+          <div class="container-fluid">
+            <button class="btn btn-outline-secondary me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar">
+              ☰
+            </button>
+    <a class="navbar-brand d-flex align-items-center" href="{{ url_for('dashboard') }}">📊 TrackIt</a>
+            <div class="navbar-nav ms-auto">
+              <a class="btn btn-success me-2" href="/add">➕ Add Transaction</a>
+            </div>
+          </div>
+        </nav>
+
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar" aria-labelledby="sidebarLabel" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="sidebarLabel" style="color: white;">📊 TrackIt</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <div class="list-group list-group-flush bg-transparent">
+              <a href="/dashboard" class="list-group-item list-group-item-action bg-transparent text-white border-0">
+                <img src="https://img.icons8.com/fluency/24/ffffff/dashboard.png" alt="Dashboard" class="me-2"> Dashboard
+              </a>
+              <a href="/transactions" class="list-group-item list-group-item-action bg-transparent text-white border-0">
+                <img src="https://img.icons8.com/fluency/24/ffffff/list.png" alt="Transactions" class="me-2"> All Transaction
+              </a>
+              <a href="/report" class="list-group-item list-group-item-action bg-transparent text-white border-0">
+                <img src="https://img.icons8.com/fluency/24/ffffff/combo-chart.png" alt="Report" class="me-2"> Report
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="container">
+          <div class="card p-4">
+            <h3>Add Transaction</h3>
+
+            <form method="POST">
+              <div class="mb-3">
+                <label>Description</label>
+                <input type="text" name="description" class="form-control">
+              </div>
+
+              <div class="mb-3">
+                <label>Amount</label>
+                <input type="number" step="0.01" name="amount" class="form-control" required>
+              </div>
+
+              <div class="mb-3">
+                <label>Date</label>
+                <input type="date" name="date" class="form-control" required>
+              </div>
+
+              <div class="mb-3">
+                <label>Category</label>
+                <select name="category" class="form-control">
+                  <option>🍕 Food</option>
+                  <option>✈️ Travel</option>
+                  <option>🏠 Rent</option>
+                  <option>🛍️ Shopping</option>
+                  <option>💡 Bills</option>
+                  <option>📦 Others</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label>Payment Mode</label>
+                <select name="payment_mode" class="form-control">
+                  <option>💵 Cash</option>
+                  <option>📱 UPI</option>
+                  <option>💳 Card</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label>Type</label>
+                <select name="type" class="form-control">
+                  <option value="expense">💸 Expense</option>
+                  <option value="income">💰 Income</option>
+                </select>
+              </div>
+
+              <button class="btn btn-success">Save</button>
+              <a href="/transactions" class="btn btn-secondary">Cancel</a>
+            </form>
+          </div>
+        </div>
+    </div>
+</body>
+</html>

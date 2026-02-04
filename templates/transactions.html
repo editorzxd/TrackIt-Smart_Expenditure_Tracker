@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Expense</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <div class="app-wrapper">
+        <nav class="navbar navbar-expand-lg mb-4">
+          <div class="container-fluid">
+            <button class="btn btn-outline-secondary me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar">
+              ☰
+            </button>
+            <a class="navbar-brand d-flex align-items-center" href="{{ url_for('dashboard') }}">📊 TrackIt</a>
+            <div class="navbar-nav ms-auto">
+              <a class="btn btn-success me-2" href="{{ url_for('add_transaction') }}">➕ Add Transaction</a>
+            </div>
+          </div>
+        </nav>
+
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar" aria-labelledby="sidebarLabel" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="sidebarLabel" style="color: white;">📊 TrackIt</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <div class="list-group list-group-flush bg-transparent">
+              <a href="/dashboard" class="list-group-item list-group-item-action bg-transparent text-white border-0">
+                <img src="https://img.icons8.com/fluency/24/ffffff/dashboard.png" alt="Dashboard" class="me-2"> Dashboard
+              </a>
+              <a href="/transactions" class="list-group-item list-group-item-action active bg-transparent text-white border-0">
+                <img src="https://img.icons8.com/fluency/24/ffffff/add.png" alt="Add" class="me-2"> All Transaction
+              </a>
+              <a href="/report" class="list-group-item list-group-item-action bg-transparent text-white border-0">
+                <img src="https://img.icons8.com/fluency/24/ffffff/combo-chart.png" alt="Report" class="me-2"> Report
+              </a>
+            </div>
+          </div>
+        </div>
+
+<div class="dashboard-grid">
+    <div class="summary-card income-card">
+        <h3>Revenue</h3>
+        <p>₹{{ "%.2f"|format(expenses|selectattr('type', 'equalto', 'income')|sum(attribute='amount') or 0) }}</p>
+    </div>
+    <div class="summary-card expense-card">
+        <h3>Expenditure</h3>
+        <p>₹{{ "%.2f"|format(expenses|selectattr('type', 'equalto', 'expense')|sum(attribute='amount') or 0) }}</p>
+    </div>
+    <div class="summary-card balance-card">
+        <h3>Balance</h3>
+        {% set balance = (expenses|selectattr('type', 'equalto', 'income')|sum(attribute='amount') or 0) - (expenses|selectattr('type', 'equalto', 'expense')|sum(attribute='amount') or 0) %}
+        <p style="color: {% if balance >= 0 %}#27ae60{% else %}#e74c3c{% endif %};">₹{{ "%.2f"|format(balance) }}</p>
+    </div>
+</div>
+
+<hr>
+
+<!-- FILTERS -->
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h5 class="card-title mb-3">🔍 Filter Transactions</h5>
+        <form method="get" class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label fw-bold">From Date</label>
+                <input type="date" name="from_date" class="form-control" value="{{ request.args.get('from_date', '') }}">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-bold">To Date</label>
+                <input type="date" name="to_date" class="form-control" value="{{ request.args.get('to_date', '') }}">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label fw-bold">Category</label>
+                <select name="category" class="form-select">
+                    <option value="">All Categories</option>
+                    <option value="Food" {% if request.args.get('category') == 'Food' %}selected{% endif %}>🍕 Food</option>
+                    <option value="Travel" {% if request.args.get('category') == 'Travel' %}selected{% endif %}>✈️ Travel</option>
+                    <option value="Rent" {% if request.args.get('category') == 'Rent' %}selected{% endif %}>🏠 Rent</option>
+                    <option value="Shopping" {% if request.args.get('category') == 'Shopping' %}selected{% endif %}>🛍️ Shopping</option>
+                    <option value="Bills" {% if request.args.get('category') == 'Bills' %}selected{% endif %}>💡 Bills</option>
+                    <option value="Others" {% if request.args.get('category') == 'Others' %}selected{% endif %}>📦 Others</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label fw-bold">Payment Mode</label>
+                <select name="payment_mode" class="form-select">
+                    <option value="">All Payments</option>
+                    <option value="Cash" {% if request.args.get('payment_mode') == 'Cash' %}selected{% endif %}>💵 Cash</option>
+                    <option value="UPI" {% if request.args.get('payment_mode') == 'UPI' %}selected{% endif %}>📱 UPI</option>
+                    <option value="Card" {% if request.args.get('payment_mode') == 'Card' %}selected{% endif %}>💳 Card</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label fw-bold">Type</label>
+                <select name="type" class="form-select">
+                    <option value="">All Types</option>
+                    <option value="income" {% if request.args.get('type') == 'income' %}selected{% endif %}>💰 Income</option>
+                    <option value="expense" {% if request.args.get('type') == 'expense' %}selected{% endif %}>💸 Expense</option>
+                </select>
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary me-2">🔍 Apply Filters</button>
+                <a href="/transactions" class="btn btn-secondary">🔄 Clear Filters</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>📋 All Transactions</h2>
+    
+</div>
+
+<div class="card shadow">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>📅 Date</th>
+                        <th>📝 Description</th>
+                        <th>🏷️ Category</th>
+                        <th>💰 Amount</th>
+                        <th>🔄 Type</th>
+                        <th>💳 Payment</th>
+                        <th>⚙️ Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for e in expenses %}
+                    <tr>
+                        <td><strong>{{ e.date.strftime('%d-%m-%Y') }}</strong></td>
+                        <td>{{ e.description or 'N/A' }}</td>
+                        <td>
+                            <span class="badge bg-secondary">{{ e.category }}</span>
+                        </td>
+                        <td class="{% if e.type == 'income' %}text-success{% else %}text-danger{% endif %}">
+                            <strong>₹{{ "%.2f"|format(e.amount) }}</strong>
+                        </td>
+                        <td>
+                            {% if e.type == 'income' %}
+                                <span class="badge bg-success">💰 Income</span>
+                            {% else %}
+                                <span class="badge bg-danger">💸 Expense</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ e.payment_mode }}</td>
+                        <td>
+                            <a href="/edit/{{ e.id }}" class="btn btn-sm btn-warning me-1">✏️ Edit</a>
+                            <a href="/delete/{{ e.id }}" class="btn btn-sm btn-danger"
+                            onclick="return confirm('Are you sure you want to delete this transaction?')">🗑️ Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% if not expenses %}
+<div class="text-center mt-5">
+    <img src="https://img.icons8.com/fluency/96/000000/empty-box.png" alt="No transactions" class="mb-3">
+    <h4 class="text-muted">No transactions found</h4>
+    <p class="text-muted">Try adjusting your filters or add some transactions.</p>
+    <a href="/add" class="btn btn-primary">➕ Add Transaction</a>
+</div>
+{% endif %}
+
+<div>
+    <a href="/export" class="btn btn-success">⬇ Export to CSV</a>
+</div>
+
+</body>
+</html>
+
