@@ -35,14 +35,14 @@
       <div class="mb-3">
         <label>Date</label>
         <input type="date" name="date" class="form-control"
-               value="{{ expense.date }}" required>
+               value="{{ expense.date.strftime('%Y-%m-%d') }}" required>
       </div>
 
       <div class="mb-3">
         <label>Category</label>
         <select name="category" class="form-control">
-          {% for c in ['Food','Travel','Rent','Shopping','Bills','Others'] %}
-          <option {% if expense.category = c %}selected{% endif %}>{{ c }}</option>
+          {% for c in ['🍕 Food','✈️ Travel','🏠 Rent','🛍️ Shopping','💡 Bills','📦 Others'] %}
+          <option {% if expense.category == c %}selected{% endif %}>{{ c }}</option>
           {% endfor %}
         </select>
       </div>
@@ -50,7 +50,7 @@
       <div class="mb-3">
         <label>Payment Mode</label>
         <select name="payment_mode" class="form-control">
-          {% for p in ['Cash','UPI','Card'] %}
+          {% for p in ['💵 Cash','📱 UPI','💳 Card'] %}
           <option {% if expense.payment_mode == p %}selected{% endif %}>{{ p }}</option>
           {% endfor %}
         </select>
@@ -59,8 +59,8 @@
       <div class="mb-3">
         <label>Type</label>
         <select name="type" class="form-control">
-          <option value="expense" {% if expense.type=='expense' %}selected{% endif %}>Expense</option>
-          <option value="income" {% if expense.type=='income' %}selected{% endif %}>Income</option>
+          <option value="expense" {% if expense.type=='expense' %}selected{% endif %}>💸 Expense</option>
+          <option value="income" {% if expense.type=='income' %}selected{% endif %}>💰 Income</option>
         </select>
       </div>
 

@@ -76,21 +76,21 @@
                 <label class="form-label fw-bold">Category</label>
                 <select name="category" class="form-select">
                     <option value="">All Categories</option>
-                    <option value="Food" {% if request.args.get('category') == 'Food' %}selected{% endif %}>🍕 Food</option>
-                    <option value="Travel" {% if request.args.get('category') == 'Travel' %}selected{% endif %}>✈️ Travel</option>
-                    <option value="Rent" {% if request.args.get('category') == 'Rent' %}selected{% endif %}>🏠 Rent</option>
-                    <option value="Shopping" {% if request.args.get('category') == 'Shopping' %}selected{% endif %}>🛍️ Shopping</option>
-                    <option value="Bills" {% if request.args.get('category') == 'Bills' %}selected{% endif %}>💡 Bills</option>
-                    <option value="Others" {% if request.args.get('category') == 'Others' %}selected{% endif %}>📦 Others</option>
+                    <option value="🍕 Food" {% if request.args.get('category') == '🍕 Food' %}selected{% endif %}>🍕 Food</option>
+                    <option value="✈️ Travel" {% if request.args.get('category') == '✈️ Travel' %}selected{% endif %}>✈️ Travel</option>
+                    <option value="🏠 Rent" {% if request.args.get('category') == '🏠 Rent' %}selected{% endif %}>🏠 Rent</option>
+                    <option value="🛍️ Shopping" {% if request.args.get('category') == '🛍️ Shopping' %}selected{% endif %}>🛍️ Shopping</option>
+                    <option value="💡 Bills" {% if request.args.get('category') == '💡 Bills' %}selected{% endif %}>💡 Bills</option>
+                    <option value="📦 Others" {% if request.args.get('category') == '📦 Others' %}selected{% endif %}>📦 Others</option>
                 </select>
             </div>
             <div class="col-md-2">
                 <label class="form-label fw-bold">Payment Mode</label>
                 <select name="payment_mode" class="form-select">
                     <option value="">All Payments</option>
-                    <option value="Cash" {% if request.args.get('payment_mode') == 'Cash' %}selected{% endif %}>💵 Cash</option>
-                    <option value="UPI" {% if request.args.get('payment_mode') == 'UPI' %}selected{% endif %}>📱 UPI</option>
-                    <option value="Card" {% if request.args.get('payment_mode') == 'Card' %}selected{% endif %}>💳 Card</option>
+                    <option value="💵 Cash" {% if request.args.get('payment_mode') == '💵 Cash' %}selected{% endif %}>💵 Cash</option>
+                    <option value="📱 UPI" {% if request.args.get('payment_mode') == '📱 UPI' %}selected{% endif %}>📱 UPI</option>
+                    <option value="💳 Card" {% if request.args.get('payment_mode') == '💳 Card' %}selected{% endif %}>💳 Card</option>
                 </select>
             </div>
             <div class="col-md-2">
